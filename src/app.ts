@@ -7,6 +7,8 @@ import koaStatic from 'koa-static';
 import koaJWT from 'koa-jwt';
 import connectDB from '@/db';
 import userRoute from '@/routes/user';
+import todoRoute from '@/routes/todo';
+import { error } from '@/middlewares';
 import { JWTSecret } from '@/config';
 
 // 连接数据库
@@ -15,13 +17,7 @@ connectDB();
 const app = new Koa();
 
 // middlewares
-app.use(async (_, next) => {
-  try {
-    await next();
-  } catch (err) {
-    console.log('Error:', err);
-  }
-});
+app.use(error());
 
 app.use(logger());
 app.use(json());
@@ -39,5 +35,6 @@ app.use(koaJWT({
 
 // routes
 app.use(userRoute.routes()).use(userRoute.allowedMethods());
+app.use(todoRoute.routes()).use(todoRoute.allowedMethods());
 
 app.listen(3000);

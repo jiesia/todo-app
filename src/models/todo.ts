@@ -1,10 +1,12 @@
 import { Schema, model } from 'mongoose';
 
 const todoSchema = new Schema({
-  title: String,
-  desc: String,
-  done: Boolean,
   author: String,
+  content: String,
+  done: {
+    type: Boolean,
+    default: false,
+  },
   createTime: {
     type: Date,
     default: Date.now(),

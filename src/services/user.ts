@@ -59,6 +59,6 @@ export async function verify(token: string) {
     const result = jwt.verify(token, JWTSecret);
     return new Result(200, '认证成功', result);
   } catch (err) {
-    return new Result(400, '认证失败');
+    return new Result(401, '认证失败');
   }
 }

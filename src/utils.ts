@@ -9,3 +9,7 @@ export class Result {
     this.data = data;
   }
 }
+
+export function getToken(rawToken: string = '') {
+  return rawToken.replace('Bearer ', '');
+}

@@ -1,0 +1,15 @@
+{
+  "restartable": "rs",
+  "verbose": true,
+  "ext": "ts,json",
+  "exec": "ts-node src/app.ts",
+  "watch": [
+    "src/**/*.ts"
+  ],
+  "ignore": [
+    "*.test.ts"
+  ],
+  "env": {
+    "DEBUG": "TODO:*"
+  }
+}

@@ -7,5 +7,7 @@ const router = new Router({ prefix: '/api/user' });
 router.post('/login', userControllers.login);
 // * 注册
 router.post('/register', userControllers.register);
+// * 登录认证
+router.post('/verify', userControllers.verify);
 
 export default router;

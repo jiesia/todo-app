@@ -5,7 +5,6 @@ import * as userServices from '@/services/user';
 export const login: IMiddleware = async ctx => {
   // TODO 参数校验
   const { username, password } = ctx.request.body;
-
   ctx.body = await userServices.login(username, password);
 };
 
@@ -15,4 +14,10 @@ export const register: IMiddleware = async ctx => {
   const { username, password } = ctx.request.body;
 
   ctx.body = await userServices.register(username, password);
+};
+
+export const verify: IMiddleware = async ctx => {
+  let token = ctx.header.authorization || '';
+  token = token.replace('Bearer ', '');
+  ctx.body = await userServices.verify(token);
 };

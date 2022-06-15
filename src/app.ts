@@ -4,8 +4,10 @@ import logger from 'koa-logger';
 import json from 'koa-json';
 import bodyParser from 'koa-bodyparser';
 import koaStatic from 'koa-static';
+import koaJWT from 'koa-jwt';
 import connectDB from '@/db';
 import userRoute from '@/routes/user';
+import { JWTSecret } from '@/config';
 
 // 连接数据库
 connectDB();
@@ -26,6 +28,14 @@ app.use(json());
 app.use(cors());
 app.use(bodyParser({ enableTypes: ['json', 'form', 'text'] }));
 app.use(koaStatic(__dirname + '/public'));
+app.use(koaJWT({
+  secret: JWTSecret,
+}).unless({
+  path: [
+    /^\/api\/user\/login/,
+    /^\/api\/user\/register/,
+  ]
+}));
 
 // routes
 app.use(userRoute.routes()).use(userRoute.allowedMethods());

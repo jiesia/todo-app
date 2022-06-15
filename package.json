@@ -4,7 +4,7 @@
   "description": "Todo Application",
   "main": "index.js",
   "scripts": {
-    "dev": "cross-env DEBUG=TODO:* nodemon --watch src/**/*.ts --exec \"ts-node\" src/app.ts"
+    "dev": "cross-env DEBUG=TODO:* nodemon --watch src/**/*.ts --exec \"ts-node src/app.ts\""
   },
   "dependencies": {
     "@koa/cors": "^3.3.0",
@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@types/debug": "^4.1.7",
+    "@types/jsonwebtoken": "^8.5.8",
     "@types/koa": "^2.13.4",
     "@types/koa-bodyparser": "^4.3.7",
     "@types/koa-json": "^2.0.20",

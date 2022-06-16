@@ -1,6 +1,4 @@
-import jwt from 'jsonwebtoken';
 import Todo from '@/models/todo';
-import { JWTSecret } from '@/config';
 import { Result } from '@/utils';
 
 /**

@@ -7,7 +7,7 @@
     "src/**/*.ts"
   ],
   "ignore": [
-    "*.test.ts"
+    "*.spec.ts"
   ],
   "env": {
     "DEBUG": "TODO:*"

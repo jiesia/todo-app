@@ -20,7 +20,10 @@ export const create: IMiddleware = async ctx => {
 
 // * 删除一个 todo
 export const del: IMiddleware = async ctx => {
-
+  // TODO 参数校验
+  const { todoId } = ctx.request.body;
+  const token = getToken(ctx.header.authorization);
+  ctx.body = await todoServices.del(token, todoId);
 };
 
 // * 更新 todo 信息 { title, desc, done }

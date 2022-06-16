@@ -54,3 +54,29 @@ export async function list(token: string) {
 
   return new Result(200, '获取成功', todos);
 }
+
+/**
+ * 删除 todo
+ * @param token 当前登录用户的 token
+ * @param todoId 需要删除的 todo id
+ * @returns 是否删除成功
+ */
+export async function del(token: string, todoId: string) {
+  // 根据 token 识别当前用户
+  let author: string;
+
+  try {
+    const result = jwt.verify(token, JWTSecret) as jwt.JwtPayload;
+    author = result._id;
+  } catch (err) {
+    return new Result(401, '用户认证失败');
+  }
+
+  // 查询需要删除的 todo
+  const rmResult = await Todo.findByIdAndRemove(todoId, { author });
+  if (!rmResult) { // 不存在当前 todo
+    return new Result(400, 'todo 不存在');
+  }
+
+  return new Result(200, '删除成功', rmResult);
+}

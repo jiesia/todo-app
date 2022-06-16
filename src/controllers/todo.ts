@@ -4,7 +4,10 @@ import { getToken } from '@/utils';
 
 // * 查询所有 todo
 export const list: IMiddleware = async ctx => {
-
+  // TODO 参数校验
+  const { content } = ctx.request.body;
+  const token = getToken(ctx.header.authorization);
+  ctx.body = await todoServices.list(token);
 };
 
 // * 新增一个 todo

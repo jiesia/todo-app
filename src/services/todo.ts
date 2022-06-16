@@ -30,3 +30,27 @@ export async function create(token: string, content: string) {
 
   return new Result(200, '创建成功', todo);
 }
+
+/**
+ * 获取用户的所有 todo
+ *  1. 用户认证信息过期
+ *  2. 获取成功
+ * @param token 当前登录用户的 token
+ * @returns 当前用户的 todos
+ */
+export async function list(token: string) {
+  // 根据 token 获取当前用户的所有 todos
+  let author: string;
+
+  try {
+    const result = jwt.verify(token, JWTSecret) as jwt.JwtPayload;
+    author = result._id;
+  } catch (err) {
+    return new Result(401, '用户认证失败');
+  }
+
+  // 获取 todo
+  const todos = await Todo.find({ author });
+
+  return new Result(200, '获取成功', todos);
+}

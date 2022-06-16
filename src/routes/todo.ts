@@ -9,7 +9,7 @@ router.get('/', todoControllers.list);
 router.post('/', todoControllers.create);
 // * 删除 todo (批量删除)
 router.delete('/', todoControllers.del);
-// * 更新 todo 信息{ title, desc, done }
+// * 更新 todo 信息{ content, done }
 router.put('/', todoControllers.update);
 
 export default router;

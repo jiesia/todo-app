@@ -22,7 +22,7 @@ export async function login(username: string, password: string) {
   const options = { expiresIn: 3600 * 24 };
   const token = jwt.sign(payload, JWTSecret, options);
 
-  return new Result(200, '登陆成功', { token });
+  return new Result(200, '登录成功', { token });
 }
 
 /**

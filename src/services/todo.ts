@@ -75,8 +75,40 @@ export async function del(token: string, todoId: string) {
   // 查询需要删除的 todo
   const rmResult = await Todo.findByIdAndRemove(todoId, { author });
   if (!rmResult) { // 不存在当前 todo
-    return new Result(400, 'todo 不存在');
+    return new Result(400, '需要被删除的 todo 不存在');
   }
 
   return new Result(200, '删除成功', rmResult);
+}
+
+interface IUpdateParams {
+  content?: string,
+  done?: boolean,
+}
+
+/**
+ * 修改 todo
+ * @param token 当前登录用户的 token
+ * @param todoId 需要修改的 token id
+ * @param updateInfo 需要修改的信息
+ * @returns 修改结果
+ */
+export async function update(token: string, todoId: string, updateInfo: IUpdateParams) {
+  // 根据 token 识别当前用户
+  let author: string;
+
+  try {
+    const result = jwt.verify(token, JWTSecret) as jwt.JwtPayload;
+    author = result._id;
+  } catch (err) {
+    return new Result(401, '用户认证失败');
+  }
+
+  // 修改 todo
+  const updateResult = await Todo.updateOne({ _id: todoId, author }, { ...updateInfo, updateTime: Date.now() });
+  if (updateResult.matchedCount === 0) { // 不存在当前 todo
+    return new Result(400, '需要被修改的 todo 不存在');
+  }
+
+  return new Result(200, '修改成功');
 }

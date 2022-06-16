@@ -28,5 +28,8 @@ export const del: IMiddleware = async ctx => {
 
 // * 更新 todo 信息 { title, desc, done }
 export const update: IMiddleware = async ctx => {
-
+  // TODO 参数校验
+  const { todoId, updateInfo } = ctx.request.body;
+  const token = getToken(ctx.header.authorization);
+  ctx.body = await todoServices.update(token, todoId, updateInfo);
 };

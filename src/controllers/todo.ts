@@ -1,35 +1,33 @@
 import { IMiddleware } from 'koa-router';
 import * as todoServices from '@/services/todo';
-import { getToken } from '@/utils';
+import { IState } from '@/types';
 
 // * 查询所有 todo
-export const list: IMiddleware = async ctx => {
-  // TODO 参数校验
-  const { content } = ctx.request.body;
-  const token = getToken(ctx.header.authorization);
-  ctx.body = await todoServices.list(token);
+export const list: IMiddleware<IState> = async ctx => {
+  const { userId: author } = ctx.state;
+  ctx.body = await todoServices.list(author);
 };
 
 // * 新增一个 todo
-export const create: IMiddleware = async ctx => {
+export const create: IMiddleware<IState> = async ctx => {
   // TODO 参数校验
   const { content } = ctx.request.body;
-  const token = getToken(ctx.header.authorization);
-  ctx.body = await todoServices.create(token, content);
+  const { userId: author } = ctx.state;
+  ctx.body = await todoServices.create(author, content);
 };
 
 // * 删除一个 todo
-export const del: IMiddleware = async ctx => {
+export const del: IMiddleware<IState> = async ctx => {
   // TODO 参数校验
   const { todoId } = ctx.request.body;
-  const token = getToken(ctx.header.authorization);
-  ctx.body = await todoServices.del(token, todoId);
+  const { userId: author } = ctx.state;
+  ctx.body = await todoServices.del(author, todoId);
 };
 
 // * 更新 todo 信息 { title, desc, done }
-export const update: IMiddleware = async ctx => {
+export const update: IMiddleware<IState> = async ctx => {
   // TODO 参数校验
   const { todoId, updateInfo } = ctx.request.body;
-  const token = getToken(ctx.header.authorization);
-  ctx.body = await todoServices.update(token, todoId, updateInfo);
+  const { userId: author } = ctx.state;
+  ctx.body = await todoServices.update(author, todoId, updateInfo);
 };

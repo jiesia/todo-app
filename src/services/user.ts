@@ -41,24 +41,7 @@ export async function register(username: string, password: string) {
   }
 
   // * 新建用户
-  const user = await User.create({
-    username,
-    password,
-  });
+  const user = await User.create({ username, password });
 
   return new Result(200, '注册成功', { _id: user._id });
-}
-
-/**
- * 检验是否登录
- * @param token token
- * @returns 登录认证结果
- */
-export async function verify(token: string) {
-  try {
-    const result = jwt.verify(token, JWTSecret);
-    return new Result(200, '认证成功', result);
-  } catch (err) {
-    return new Result(401, '认证失败');
-  }
 }

@@ -5,76 +5,37 @@ import { Result } from '@/utils';
 
 /**
  * 新建一个 todo
- *  1. 用户认证信息过期
- *  2. 创建成功
- * @param token 当前登录用户的 token
+ * @param author 当前登录用户的 id
  * @param content 新建的 todo 内容
  * @returns 创建结果
  */
-export async function create(token: string, content: string) {
-  // 根据 token 获取当前新建 todo 的用户id
-  let author: string;
-
-  try {
-    const result = jwt.verify(token, JWTSecret) as jwt.JwtPayload;
-    author = result._id;
-  } catch (err) {
-    return new Result(401, '用户认证失败');
-  }
-
+export async function create(author: string, content: string) {
   // 创建 todo
-  const todo = await Todo.create({
-    author,
-    content,
-  });
-
+  const todo = await Todo.create({ author, content });
   return new Result(200, '创建成功', todo);
 }
 
 /**
- * 获取用户的所有 todo
- *  1. 用户认证信息过期
- *  2. 获取成功
- * @param token 当前登录用户的 token
+ * 获取当前用户所有的 todo
+ * @param author 当前登录用户的 id
  * @returns 当前用户的 todos
  */
-export async function list(token: string) {
-  // 根据 token 获取当前用户的所有 todos
-  let author: string;
-
-  try {
-    const result = jwt.verify(token, JWTSecret) as jwt.JwtPayload;
-    author = result._id;
-  } catch (err) {
-    return new Result(401, '用户认证失败');
-  }
-
+export async function list(author: string) {
   // 获取 todo
   const todos = await Todo.find({ author });
-
   return new Result(200, '获取成功', todos);
 }
 
 /**
  * 删除 todo
- * @param token 当前登录用户的 token
+ * @param author 当前登录用户的 id
  * @param todoId 需要删除的 todo id
  * @returns 是否删除成功
  */
-export async function del(token: string, todoId: string) {
-  // 根据 token 识别当前用户
-  let author: string;
-
-  try {
-    const result = jwt.verify(token, JWTSecret) as jwt.JwtPayload;
-    author = result._id;
-  } catch (err) {
-    return new Result(401, '用户认证失败');
-  }
-
+export async function del(author: string, todoId: string) {
   // 查询需要删除的 todo
-  const rmResult = await Todo.findByIdAndRemove(todoId, { author });
-  if (!rmResult) { // 不存在当前 todo
+  const rmResult = await Todo.deleteOne({ _id: todoId, author });
+  if (rmResult.deletedCount === 0) { // 不存在当前 todo
     return new Result(400, '需要被删除的 todo 不存在');
   }
 
@@ -88,22 +49,12 @@ interface IUpdateParams {
 
 /**
  * 修改 todo
- * @param token 当前登录用户的 token
- * @param todoId 需要修改的 token id
+ * @param author 当前登录用户的 id
+ * @param todoId 需要修改的 todo id
  * @param updateInfo 需要修改的信息
  * @returns 修改结果
  */
-export async function update(token: string, todoId: string, updateInfo: IUpdateParams) {
-  // 根据 token 识别当前用户
-  let author: string;
-
-  try {
-    const result = jwt.verify(token, JWTSecret) as jwt.JwtPayload;
-    author = result._id;
-  } catch (err) {
-    return new Result(401, '用户认证失败');
-  }
-
+export async function update(author: string, todoId: string, updateInfo: IUpdateParams) {
   // 修改 todo
   const updateResult = await Todo.updateOne({ _id: todoId, author }, { ...updateInfo, updateTime: Date.now() });
   if (updateResult.matchedCount === 0) { // 不存在当前 todo
